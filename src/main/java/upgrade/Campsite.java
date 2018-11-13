@@ -1,22 +1,27 @@
 package upgrade;
 
 
+import org.joda.time.DateTime;
+
 public class Campsite {
 
-	private final long id;
-	private final String email;
-	
-	public Campsite (long id, String email) {
-		this.id =id;
-		this.email=email;
+	private  long id;
+	private DateTime date;
+
+	public DateTime getDate() {
+		return date;
 	}
-	
-	public long getId(){
+
+	public void setDate(DateTime date) {
+		this.date = date;
+	}
+
+	public long getId() {
 		return id;
 	}
-	
-	public String getEmail(){
-		return email;
+
+	public void setId(long id) {
+		this.id = id;
 	}
 
 } 
