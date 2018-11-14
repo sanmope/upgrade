@@ -6,6 +6,7 @@ import org.joda.time.DateTime;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import java.util.Date;
 
 @Entity
 public class Reservation {
@@ -13,8 +14,8 @@ public class Reservation {
     @GeneratedValue
     private Long id;
     private String userName;
-    private DateTime checkin;
-    private DateTime checkout;
+    private Date checkin;
+    private Date checkout;
 
     public String getUserName() {
         return userName;
@@ -26,8 +27,8 @@ public class Reservation {
 
 
     public Reservation(String name, DateTime from, DateTime to) {
-        checkin = from;
-        checkout = to;
+        checkin = from.toDate();
+        checkout = to.toDate();
         userName = name;
     }
 
@@ -39,19 +40,19 @@ public class Reservation {
         this.id = id;
     }
 
-    public DateTime getCheckin() {
+    public Date getCheckin() {
         return checkin;
     }
 
-    public void setCheckin(DateTime checkin) {
+    public void setCheckin(Date checkin) {
         this.checkin = checkin;
     }
 
-    public DateTime getCheckout() {
+    public Date getCheckout() {
         return checkout;
     }
 
-    public void setCheckout(DateTime checkout) {
+    public void setCheckout(Date checkout) {
         this.checkout = checkout;
     }
 }

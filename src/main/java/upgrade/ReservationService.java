@@ -13,7 +13,7 @@ public interface ReservationService {
 
     Long setCampsiteReservation(String name, DateTime from, DateTime to);
 
-    Long modifyCampsiteReservation(long reservationid, DateTime from, DateTime to);
+    void modifyCampsiteReservation(long reservationid, DateTime from, DateTime to);
 
-    Long deleteCampsiteReservation(long reservationId);
+    void deleteCampsiteReservation(long reservationId);
 }

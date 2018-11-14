@@ -35,13 +35,13 @@ public class ReservationController {
     }
 
     @RequestMapping("/modifyreservation")
-    public Long modifyReservation(@RequestParam(value="reservationid", required=true) long reservationid, @DateTimeFormat(pattern="MM/dd/yyyy") DateTime from, @DateTimeFormat(pattern="MM/dd/yyyy") DateTime to) {
-        return reservationService.modifyCampsiteReservation(reservationid,from,to);
+    public void modifyReservation(@RequestParam(value="reservationid", required=true) long reservationid, @DateTimeFormat(pattern="MM/dd/yyyy") DateTime from, @DateTimeFormat(pattern="MM/dd/yyyy") DateTime to) {
+        reservationService.modifyCampsiteReservation(reservationid,from,to);
     }
 
     @RequestMapping("/deletereservation")
-    public Long deleteReservation(@RequestParam(value="reservationid", required=true) long reservationid) {
-        return reservationService.deleteCampsiteReservation(reservationid);
+    public void deleteReservation(@RequestParam(value="reservationid", required=true) long reservationid) {
+        reservationService.deleteCampsiteReservation(reservationid);
     }
 
 }

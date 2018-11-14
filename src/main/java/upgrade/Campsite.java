@@ -3,8 +3,15 @@ package upgrade;
 
 import org.joda.time.DateTime;
 
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+
+@Entity
 public class Campsite {
 
+	@Id
+	@GeneratedValue
 	private  long id;
 	private DateTime date;
 
