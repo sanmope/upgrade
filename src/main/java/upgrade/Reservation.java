@@ -17,6 +17,9 @@ public class Reservation {
     private Date checkin;
     private Date checkout;
 
+    public Reservation() {
+    }
+
     public String getUserName() {
         return userName;
     }

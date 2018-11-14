@@ -33,7 +33,7 @@ public class ReservationServiceImpl implements ReservationService {
 
     @Override
     public void modifyCampsiteReservation(long reservationid, DateTime from, DateTime to) {
-        Reservation reservation = reservationRepository.getOne(reservationid);
+        Reservation reservation = reservationRepository.findById(reservationid).orElse(null);
         reservation.setCheckin(from.toDate());
         reservation.setCheckout(to.toDate());
         reservationRepository.save(reservation);
