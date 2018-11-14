@@ -1,24 +1,47 @@
 package upgrade;
 
-import java.util.concurrent.atomic.AtomicLong;
-
 import org.joda.time.DateTime;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.List;
+
 @RestController
 public class ReservationController {
-    private static final String template = "Hello, %s!";
-    private final AtomicLong counter = new AtomicLong();
+
     @Autowired
-    private ReservationService reservationService;
+    ReservationService reservationService;
 
-    @RequestMapping("/campsite")
-    public Campsite campsite(@RequestParam(value="email", defaultValue="jorge@lopez.com") String email) {
-        reservationService.getReservationByDate(new DateTime());
+    @RequestMapping("/reservationbycheckin")
+    public Reservation reservationByCheckin(@RequestParam @DateTimeFormat(pattern="MM/dd/yyyy") DateTime checkin) {
+        return reservationService.getReservationByCheckin(checkin);
 
-        return new Campsite(counter.incrementAndGet(),String.format(template, email));
     }
+
+    @RequestMapping("/campsiteavailable")
+    public List<Campsite> campsiteAvailable(@RequestParam @DateTimeFormat(pattern="MM/dd/yyyy") DateTime from, @DateTimeFormat(pattern="MM/dd/yyyy") DateTime to) {
+        return reservationService.getCampsiteByDateRange(from,to);
+    }
+
+    @RequestMapping("/reservecampsite")
+    public Long reserveCampsite(@RequestParam(value="name", required=true) String name, @DateTimeFormat(pattern="MM/dd/yyyy") DateTime from, @DateTimeFormat(pattern="MM/dd/yyyy") DateTime to) {
+        return reservationService.setCampsiteReservation(name,from,to);
+    }
+
+    @RequestMapping("/modifyreservation")
+    public Long modifyReservation(@RequestParam(value="reservationid", required=true) long reservationid, @DateTimeFormat(pattern="MM/dd/yyyy") DateTime from, @DateTimeFormat(pattern="MM/dd/yyyy") DateTime to) {
+        return reservationService.modifyCampsiteReservation(reservationid,from,to);
+    }
+
+    @RequestMapping("/deletereservation")
+    public Long deleteReservation(@RequestParam(value="reservationid", required=true) long reservationid) {
+        return reservationService.deleteCampsiteReservation(reservationid);
+    }
+
 }

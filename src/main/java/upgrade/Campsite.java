@@ -8,6 +8,10 @@ public class Campsite {
 	private  long id;
 	private DateTime date;
 
+	public Campsite(DateTime date) {
+		this.date = date;
+	}
+
 	public DateTime getDate() {
 		return date;
 	}
