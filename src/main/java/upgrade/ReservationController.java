@@ -6,12 +6,14 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
+@ControllerAdvice
 @RestController
 public class ReservationController {
 
@@ -19,9 +21,11 @@ public class ReservationController {
     ReservationService reservationService;
 
     @RequestMapping("/reservationbycheckin")
-    public Reservation reservationByCheckin(@RequestParam @DateTimeFormat(pattern="MM/dd/yyyy") DateTime checkin) {
-        return reservationService.getReservationByCheckin(checkin);
-
+    public Reservation reservationByCheckin(@RequestParam @DateTimeFormat(pattern="MM/dd/yyyy") DateTime checkin) throws Exception {
+        Reservation reservation = reservationService.getReservationByCheckin(checkin);
+        if (reservation == null)
+            throw new ReservationNotFoundException("404 - Reservation not found. Checkin date- " + checkin);
+        return reservation;
     }
 
     @RequestMapping("/campsiteavailable")
