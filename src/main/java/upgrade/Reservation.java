@@ -4,6 +4,7 @@ package upgrade;
 import org.joda.time.DateTime;
 
 import javax.persistence.*;
+import java.util.HashSet;
 import java.util.Set;
 
 import static javax.persistence.CascadeType.ALL;
@@ -14,8 +15,9 @@ public class Reservation {
     @GeneratedValue
     private Long id;
     private String userName;
-    @OneToMany(targetEntity=Campsite.class,mappedBy="reservation")
-    private Set<Campsite> campsiteRange;
+    @OneToMany
+    @JoinColumn(name="reservation_id",referencedColumnName = "id")
+    private Set<Campsite> campsiteRange = new HashSet<Campsite>();
 
 
     public Reservation() {
@@ -23,6 +25,7 @@ public class Reservation {
 
     public Reservation(String name, Set<Campsite> campsiteRange) {
         userName = name;
+        this.campsiteRange = campsiteRange;
     }
 
     public String getUserName() {

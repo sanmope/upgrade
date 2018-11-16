@@ -2,14 +2,10 @@ package upgrade;
 
 
 import org.joda.time.DateTime;
-import org.joda.time.Days;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import java.time.temporal.ChronoUnit;
 import java.util.*;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 @Component
 public class ReservationServiceImpl implements ReservationService {
@@ -21,13 +17,17 @@ public class ReservationServiceImpl implements ReservationService {
     CampsiteRepository campsiteRepository;
 
     public Reservation getReservationByCheckin(DateTime checkin){
-        return null;
+        return campsiteRepository.findByDate(checkin).getReservation();
     }
 
     @Override
-    public List<Campsite> getCampsiteByDateRange(DateTime from, DateTime to) {
-        List<Campsite> listOfCampsiteAvailables = new ArrayList<>();
-        return listOfCampsiteAvailables;
+    public Set<Campsite> getCampsiteByDateRange(DateTime from, DateTime to) {
+        Set<Campsite> listOfCampsiteAvailables = new HashSet<>();
+        listOfCampsiteAvailables = campsiteRepository.findByDateAfterAndDateBefore(from,to);
+        if (listOfCampsiteAvailables.size() != 0) {
+            return listOfCampsiteAvailables;
+        }else
+            throw new CampsiteNotFoundException("No dates available for this period");
     }
 
     @Override
@@ -59,6 +59,6 @@ public class ReservationServiceImpl implements ReservationService {
     }
 
     private boolean isCampsiteSetAvailable(DateTime from,DateTime to) {
-                return (campsiteRepository.findByDateAfterAndDateBefore(from,to)==null)?true:false;
+                return (campsiteRepository.findByDateAfterAndDateBefore(from,to).size()==0)?true:false;
     }
 }

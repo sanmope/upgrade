@@ -14,8 +14,6 @@ public class Campsite {
 	@GeneratedValue
 	private  long id;
 	private Date date;
-	@ManyToOne
-	@JoinColumn(name="reservationId")
 	private Reservation reservation;
 
 	public Reservation getReservation() {

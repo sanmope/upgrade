@@ -13,7 +13,7 @@ import java.util.Date;
 
 @ControllerAdvice
 @RestController
-public class CustomizedResponseEntityExceptionHandler extends ResponseEntityExceptionHandler {
+public class EntityExceptionHandler extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler(ReservationNotFoundException.class)
     public final ResponseEntity<ErrorDetails> ReservationNotFoundException(ReservationNotFoundException ex, WebRequest request) {
@@ -21,6 +21,14 @@ public class CustomizedResponseEntityExceptionHandler extends ResponseEntityExce
                 request.getDescription(false));
         return new ResponseEntity<>(errorDetails, HttpStatus.NOT_FOUND);
     }
+
+    @ExceptionHandler(CampsiteNotFoundException.class)
+    public final ResponseEntity<ErrorDetails> CampsiteNotFoundException(ReservationNotFoundException ex, WebRequest request) {
+        ErrorDetails errorDetails = new ErrorDetails(new Date(), ex.getMessage(),
+                request.getDescription(false));
+        return new ResponseEntity<>(errorDetails, HttpStatus.NOT_FOUND);
+    }
+
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(Exception.class)
     public final ResponseEntity<ErrorDetails> handleAllExceptions(Exception ex, WebRequest request) {
