@@ -3,10 +3,10 @@ package upgrade;
 
 import org.joda.time.DateTime;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import java.util.Date;
+import javax.persistence.*;
+import java.util.Set;
+
+import static javax.persistence.CascadeType.ALL;
 
 @Entity
 public class Reservation {
@@ -14,10 +14,15 @@ public class Reservation {
     @GeneratedValue
     private Long id;
     private String userName;
-    private Date checkin;
-    private Date checkout;
+    @OneToMany(targetEntity=Campsite.class,mappedBy="reservation")
+    private Set<Campsite> campsiteRange;
+
 
     public Reservation() {
+    }
+
+    public Reservation(String name, Set<Campsite> campsiteRange) {
+        userName = name;
     }
 
     public String getUserName() {
@@ -28,11 +33,12 @@ public class Reservation {
         this.userName = userName;
     }
 
+    public Set<Campsite> getCampsiteRange() {
+        return campsiteRange;
+    }
 
-    public Reservation(String name, DateTime from, DateTime to) {
-        checkin = from.toDate();
-        checkout = to.toDate();
-        userName = name;
+    public void setCampsiteRange(Set<Campsite> campsiteRange) {
+        this.campsiteRange = campsiteRange;
     }
 
     public Long getId() {
@@ -43,19 +49,4 @@ public class Reservation {
         this.id = id;
     }
 
-    public Date getCheckin() {
-        return checkin;
-    }
-
-    public void setCheckin(Date checkin) {
-        this.checkin = checkin;
-    }
-
-    public Date getCheckout() {
-        return checkout;
-    }
-
-    public void setCheckout(Date checkout) {
-        this.checkout = checkout;
-    }
 }

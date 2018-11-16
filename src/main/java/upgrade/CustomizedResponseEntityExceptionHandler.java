@@ -16,7 +16,7 @@ import java.util.Date;
 public class CustomizedResponseEntityExceptionHandler extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler(ReservationNotFoundException.class)
-    public final ResponseEntity<ErrorDetails> handleUserNotFoundException(ReservationNotFoundException ex, WebRequest request) {
+    public final ResponseEntity<ErrorDetails> ReservationNotFoundException(ReservationNotFoundException ex, WebRequest request) {
         ErrorDetails errorDetails = new ErrorDetails(new Date(), ex.getMessage(),
                 request.getDescription(false));
         return new ResponseEntity<>(errorDetails, HttpStatus.NOT_FOUND);

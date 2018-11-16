@@ -14,7 +14,4 @@ import java.util.Date;
 
 public interface ReservationRepository extends JpaRepository<Reservation, Long> {
 
-    Reservation findByCheckin(Date checkin);
-    //@Query("Select r from reservation r Where r.checkin= ?1")
-    //Reservation getReservationByCheckin(DateTime checkin);
 }

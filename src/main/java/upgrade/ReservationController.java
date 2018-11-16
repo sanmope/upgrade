@@ -11,7 +11,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
+import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Stream;
 
 @ControllerAdvice
 @RestController
@@ -34,7 +40,8 @@ public class ReservationController {
     }
 
     @RequestMapping("/reservecampsite")
-    public Long reserveCampsite(@RequestParam(value="name", required=true) String name, @DateTimeFormat(pattern="MM/dd/yyyy") DateTime from, @DateTimeFormat(pattern="MM/dd/yyyy") DateTime to) {
+    public Long reserveCampsite(@RequestParam(value="name", required=true) String name, @DateTimeFormat(pattern="MM/dd/yyyy") DateTime from, @DateTimeFormat(pattern="MM/dd/yyyy") DateTime to) throws Exception {
+
         return reservationService.setCampsiteReservation(name,from,to);
     }
 

@@ -2,11 +2,14 @@ package upgrade;
 
 
 import org.joda.time.DateTime;
+import org.joda.time.Days;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.time.temporal.ChronoUnit;
+import java.util.*;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Component
 public class ReservationServiceImpl implements ReservationService {
@@ -14,8 +17,11 @@ public class ReservationServiceImpl implements ReservationService {
     @Autowired
     ReservationRepository reservationRepository;
 
+    @Autowired
+    CampsiteRepository campsiteRepository;
+
     public Reservation getReservationByCheckin(DateTime checkin){
-        return reservationRepository.findByCheckin(checkin.toDate());
+        return null;
     }
 
     @Override
@@ -25,17 +31,25 @@ public class ReservationServiceImpl implements ReservationService {
     }
 
     @Override
-    public Long setCampsiteReservation(String name, DateTime from, DateTime to) {
-        Reservation reservation = new Reservation(name,from,to);
-        reservationRepository.save(reservation);
-        return reservation.getId();
+    public Long setCampsiteReservation(String name, DateTime from, DateTime to) throws Exception {
+        if (isCampsiteSetAvailable (from,to)) {
+            Set<Campsite> campsiteSet = new HashSet<Campsite>();
+            for (DateTime date = from; date.isBefore(to); date = date.plusDays(1)) {
+                campsiteSet.add(new Campsite(date.toDate()));
+            }
+
+            Reservation reservation = new Reservation(name, campsiteSet);
+            reservationRepository.save(reservation);
+            return reservation.getId();
+        }else {
+            throw new Exception("This range of dates is already reserved");
+        }
     }
+
 
     @Override
     public void modifyCampsiteReservation(long reservationid, DateTime from, DateTime to) {
         Reservation reservation = reservationRepository.findById(reservationid).orElse(null);
-        reservation.setCheckin(from.toDate());
-        reservation.setCheckout(to.toDate());
         reservationRepository.save(reservation);
     }
 
@@ -44,4 +58,7 @@ public class ReservationServiceImpl implements ReservationService {
         reservationRepository.deleteById(reservationId);
     }
 
+    private boolean isCampsiteSetAvailable(DateTime from,DateTime to) {
+                return (campsiteRepository.findByDateAfterAndDateBefore(from,to)==null)?true:false;
+    }
 }
