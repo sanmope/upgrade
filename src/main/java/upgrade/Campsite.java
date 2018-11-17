@@ -1,8 +1,6 @@
 package upgrade;
 
 
-import org.joda.time.DateTime;
-
 import javax.persistence.*;
 import java.util.Date;
 
@@ -12,23 +10,20 @@ public class Campsite {
 
 	@Id
 	@GeneratedValue
+	@Column(name="campsite_id")
 	private  long id;
 	private Date date;
-	private Reservation reservation;
 
-	public Reservation getReservation() {
-		return reservation;
-	}
+	private Long reservation_id;
+/*	@Version
+	private Long version;*/
 
-	public void setReservation(Reservation reservation) {
-		this.reservation = reservation;
-	}
+    public Campsite() {
+    }
 
-
-	public Campsite(Date date) {
+    public Campsite(Date date) {
 		this.date = date;
 	}
-
 	public Date getDate() {
 		return date;
 	}
@@ -45,4 +40,11 @@ public class Campsite {
 		this.id = id;
 	}
 
-} 
+	public Long getReservation_id() {
+		return reservation_id;
+	}
+
+	public void setReservation_id(Long reservation_id) {
+		this.reservation_id = reservation_id;
+	}
+}

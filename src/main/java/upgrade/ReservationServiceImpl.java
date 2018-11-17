@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Component
 public class ReservationServiceImpl implements ReservationService {
@@ -17,24 +18,32 @@ public class ReservationServiceImpl implements ReservationService {
     CampsiteRepository campsiteRepository;
 
     public Reservation getReservationByCheckin(DateTime checkin){
-        return campsiteRepository.findByDate(checkin).getReservation();
+        return reservationRepository.findByDate(checkin);
     }
 
     @Override
-    public Set<Campsite> getCampsiteByDateRange(DateTime from, DateTime to) {
-        Set<Campsite> listOfCampsiteAvailables = new HashSet<>();
-        listOfCampsiteAvailables = campsiteRepository.findByDateAfterAndDateBefore(from,to);
-        if (listOfCampsiteAvailables.size() != 0) {
-            return listOfCampsiteAvailables;
+    public Set<Date> getCampsiteByDateRange(DateTime from, DateTime to) {
+        Set<Campsite> setOfCampsiteAvailables = new HashSet<>();
+        Set<Date> setOfAvailableDates = new HashSet<Date>();
+        setOfCampsiteAvailables = campsiteRepository.findByDateBetween(from.toDate(),to.toDate());
+        if (setOfCampsiteAvailables.size() != 0) {
+            if (to == null )
+                to = from.plusDays(30);
+            for (DateTime date = from; date.isBefore(to); date = date.plusDays(1) ){
+                setOfAvailableDates.add(date.toDate());
+            }
+            Set<Date> datesInCampsite = setOfCampsiteAvailables.stream().map(sc -> sc.getDate()).collect(Collectors.toSet());
+            setOfAvailableDates.removeAll(datesInCampsite);
+            return setOfAvailableDates;
         }else
             throw new CampsiteNotFoundException("No dates available for this period");
     }
 
     @Override
-    public Long setCampsiteReservation(String name, DateTime from, DateTime to) throws Exception {
+    public Long CampsiteReservation(String name, DateTime from, DateTime to) throws Exception {
         if (isCampsiteSetAvailable (from,to)) {
             Set<Campsite> campsiteSet = new HashSet<Campsite>();
-            for (DateTime date = from; date.isBefore(to); date = date.plusDays(1)) {
+            for (DateTime date = from; date.isBefore(to.toInstant()); date = date.plusDays(1)) {
                 campsiteSet.add(new Campsite(date.toDate()));
             }
 
@@ -48,14 +57,20 @@ public class ReservationServiceImpl implements ReservationService {
 
 
     @Override
-    public void modifyCampsiteReservation(long reservationid, DateTime from, DateTime to) {
+    public Reservation modifyCampsiteReservation(long reservationid, DateTime from, DateTime to) {
         Reservation reservation = reservationRepository.findById(reservationid).orElse(null);
         reservationRepository.save(reservation);
+        return reservation;
     }
 
     @Override
     public void deleteCampsiteReservation(long reservationId) {
         reservationRepository.deleteById(reservationId);
+    }
+
+    @Override
+    public Reservation save(Reservation reservation) {
+        return reservationRepository.save(reservation);
     }
 
     private boolean isCampsiteSetAvailable(DateTime from,DateTime to) {

@@ -1,22 +1,19 @@
 package upgrade;
 
 
-import org.joda.time.DateTime;
-
 import javax.persistence.*;
 import java.util.HashSet;
 import java.util.Set;
-
-import static javax.persistence.CascadeType.ALL;
 
 @Entity
 public class Reservation {
     @Id
     @GeneratedValue
+    @Column(name="reservation_id")
     private Long id;
     private String userName;
-    @OneToMany
-    @JoinColumn(name="reservation_id",referencedColumnName = "id")
+    @OneToMany(cascade = CascadeType.ALL)
+    @JoinColumn(name="reservation_id",referencedColumnName = "reservation_id")
     private Set<Campsite> campsiteRange = new HashSet<Campsite>();
 
 

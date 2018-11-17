@@ -19,5 +19,5 @@ public interface CampsiteRepository extends JpaRepository<Campsite, Long> {
     @Query(value="Select * from campsite c Where c.date between ?1 and ?2",nativeQuery = true)
     Set<Campsite> findByDateAfterAndDateBefore(DateTime from, DateTime to);
 
-    Campsite findByDate(DateTime from);
+    Set<Campsite> findByDateBetween(Date from, Date to);
 }
