@@ -17,8 +17,8 @@ public class ReservationServiceImpl implements ReservationService {
     @Autowired
     CampsiteRepository campsiteRepository;
 
-    public Reservation getReservationByCheckin(DateTime checkin){
-        return reservationRepository.findByDate(checkin);
+    public Reservation getReservationByCheckin(Date checkin){
+        return reservationRepository.getReservation(checkin);
     }
 
     @Override
@@ -71,6 +71,11 @@ public class ReservationServiceImpl implements ReservationService {
     @Override
     public Reservation save(Reservation reservation) {
         return reservationRepository.save(reservation);
+    }
+
+    @Override
+    public long count() {
+        return reservationRepository.count();
     }
 
     private boolean isCampsiteSetAvailable(DateTime from,DateTime to) {

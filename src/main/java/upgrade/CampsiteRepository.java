@@ -20,4 +20,5 @@ public interface CampsiteRepository extends JpaRepository<Campsite, Long> {
     Set<Campsite> findByDateAfterAndDateBefore(DateTime from, DateTime to);
 
     Set<Campsite> findByDateBetween(Date from, Date to);
+
 }

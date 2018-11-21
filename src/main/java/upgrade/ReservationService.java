@@ -8,7 +8,7 @@ import java.util.Set;
 
 @Component
 public interface ReservationService {
-    Reservation getReservationByCheckin(DateTime checkin);
+    Reservation getReservationByCheckin(Date checkin);
 
     Set<Date> getCampsiteByDateRange(DateTime from, DateTime to);
 
@@ -19,4 +19,6 @@ public interface ReservationService {
     void deleteCampsiteReservation(long reservationId);
 
     Reservation save(Reservation reservation);
+
+    long count();
 }
