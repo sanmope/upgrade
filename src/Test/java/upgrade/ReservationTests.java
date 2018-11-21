@@ -59,17 +59,15 @@ public class ReservationTests {
         Reservation reservation1 = reservationService.getReservationByCheckin(new DateTime(1/10/2018));
         Reservation reservation2 = reservationService.getReservationByCheckin(new DateTime(1/10/2018));
 
-        Set<Campsite> campsiteSet = new HashSet<Campsite>();
-        campsiteSet.add(new Campsite(new Date(1/12/2018)));
-        campsiteSet.add(new Campsite(new Date(1/13/2018)));
-        reservation1.setCampsiteRange(campsiteSet);
+        Set<Campsite> campsiteSetModified = new HashSet<Campsite>();
+        campsiteSetModified.add(new Campsite(new Date(1/12/2018)));
+        campsiteSetModified.add(new Campsite(new Date(1/13/2018)));
+        reservation1.setCampsiteRange(campsiteSetModified);
 
-        reservationService.CampsiteReservation("Santiago",new DateTime(1/12/2018),new DateTime(1/13/2018));
-
-        Set<Campsite> campsiteSet2 = new HashSet<Campsite>();
-        campsiteSet2.add(new Campsite(new Date(1/14/2018)));
-        campsiteSet2.add(new Campsite(new Date(1/15/2018)));
-        reservation2.setCampsiteRange(campsiteSet2);
+        Set<Campsite> campsiteSetModified2 = new HashSet<Campsite>();
+        campsiteSetModified2.add(new Campsite(new Date(1/14/2018)));
+        campsiteSetModified2.add(new Campsite(new Date(1/15/2018)));
+        reservation2.setCampsiteRange(campsiteSetModified2);
 
         Assertions.assertThat(reservation1.getCampsiteRange().iterator().next().getVersion()).isEqualTo(0);
         Assertions.assertThat(reservation1.getCampsiteRange().iterator().next().getVersion()).isEqualTo(0);
