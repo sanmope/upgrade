@@ -15,12 +15,13 @@ public class Campsite {
 	private Date date;
 
 	private Long reservation_id;
-/*	@Version
-	private Long version;*/
+
+
+	@Version
+	private Long version;
 
     public Campsite() {
     }
-
     public Campsite(Date date) {
 		this.date = date;
 	}
@@ -46,5 +47,13 @@ public class Campsite {
 
 	public void setReservation_id(Long reservation_id) {
 		this.reservation_id = reservation_id;
+	}
+
+	public Long getVersion() {
+		return version;
+	}
+
+	public void setVersion(Long version) {
+		this.version = version;
 	}
 }

@@ -54,4 +54,9 @@ public class ReservationController {
         reservationService.deleteCampsiteReservation(reservationid);
     }
 
+    @RequestMapping(value="/")
+    public String landingPage() {
+        return "Welcome to the Volcano Campsite Reservation Page";
+    }
+
 }
