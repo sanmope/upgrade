@@ -1,4 +1,4 @@
-package upgrade;
+package com.upgrade.campsite;
 
 
 import javax.persistence.*;
@@ -12,12 +12,20 @@ public class Reservation {
     @Column(name="reservation_id")
     private Long id;
     private String userName;
+    private String userEmail;
+
     @OneToMany(cascade = CascadeType.ALL)
     @JoinColumn(name="reservation_id",referencedColumnName = "reservation_id")
     private Set<Campsite> campsiteRange = new HashSet<Campsite>();
 
 
     public Reservation() {
+    }
+
+    public Reservation(String userName, String userEmail, Set<Campsite> campsiteRange) {
+        this.userName = userName;
+        this.userEmail = userEmail;
+        this.campsiteRange = campsiteRange;
     }
 
     public Reservation(String name, Set<Campsite> campsiteRange) {
@@ -49,4 +57,11 @@ public class Reservation {
         this.id = id;
     }
 
+    public void setEmail(String email) {
+        this.userEmail = email;
+    }
+
+    public String getUserEmail() {
+        return userEmail;
+    }
 }

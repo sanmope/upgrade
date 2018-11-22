@@ -1,4 +1,4 @@
-package upgrade;
+package com.upgrade.campsite;
 
 import org.joda.time.DateTime;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,7 +14,8 @@ public class ReservationController {
     ReservationService reservationService;
 
     @RequestMapping(value="/campsiteavailability",method=RequestMethod.GET)
-    public Set<Date> campsiteAvailable(@RequestParam @DateTimeFormat(pattern="MM/dd/yyyy") DateTime from,@RequestParam @DateTimeFormat(pattern="MM/dd/yyyy") DateTime to) throws Exception {
+    public Set<Date> campsiteAvailable(@RequestParam @DateTimeFormat(pattern="MM/dd/yyyy") DateTime from,
+                                       @RequestParam @DateTimeFormat(pattern="MM/dd/yyyy") DateTime to) throws Exception {
         Set<Date> campsiteSet = new HashSet<>();
         try{
            campsiteSet = reservationService.getCampsiteByDateRange(from,to);
@@ -27,10 +28,12 @@ public class ReservationController {
     }
 
     @RequestMapping(value="/reservecampsite",method=RequestMethod.POST)
-    public Long reserveCampsite(@RequestParam(value="name", required=true) String name, @RequestParam @DateTimeFormat(pattern="MM/dd/yyyy") DateTime from,@RequestParam  @DateTimeFormat(pattern="MM/dd/yyyy") DateTime to) throws Exception {
+    public Long reserveCampsite(@RequestParam(value="name", required=true) String name,@RequestParam(value="email", required=true) String email,
+                                @RequestParam @DateTimeFormat(pattern="MM/dd/yyyy") DateTime from,
+                                @RequestParam  @DateTimeFormat(pattern="MM/dd/yyyy") DateTime to) throws Exception {
         Long reservationId;
         try {
-            reservationId = reservationService.CampsiteReservation(name,from,to);
+            reservationId = reservationService.CampsiteReservation(name,email,from,to);
         }catch (Exception e){
             throw new Exception("An error occured during the reservation");
         }
@@ -38,7 +41,9 @@ public class ReservationController {
     }
 
     @RequestMapping(value="/modifyreservation")
-    public Reservation reservationByCheckin(@RequestParam(value="reservation_id", required=true) long reservationId, @RequestParam @DateTimeFormat(pattern="MM/dd/yyyy") DateTime from,@RequestParam  @DateTimeFormat(pattern="MM/dd/yyyy") DateTime to) throws Exception {
+    public Reservation reservationByCheckin(@RequestParam(value="reservation_id", required=true) long reservationId,
+                                            @RequestParam @DateTimeFormat(pattern="MM/dd/yyyy") DateTime from,
+                                            @RequestParam  @DateTimeFormat(pattern="MM/dd/yyyy") DateTime to) throws Exception {
         Reservation reservation = new Reservation();
         try {
             reservation = reservationService.modifyCampsiteReservation(reservationId,from,to);
@@ -50,8 +55,12 @@ public class ReservationController {
     }
 
     @RequestMapping(value="/deletereservation",method=RequestMethod.DELETE)
-    public void deleteReservation(@RequestParam(value="reservationid", required=true) long reservationid) {
-        reservationService.deleteCampsiteReservation(reservationid);
+    public void deleteReservation(@RequestParam(value="reservationid", required=true) long reservationid) throws Exception {
+        try{
+            reservationService.deleteCampsiteReservation(reservationid);
+        }catch (Exception e){
+            throw new Exception();
+        }
     }
 
     @RequestMapping(value="/")

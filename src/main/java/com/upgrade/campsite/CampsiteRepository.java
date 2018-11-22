@@ -1,4 +1,4 @@
-package upgrade;
+package com.upgrade.campsite;
 
 import org.joda.time.DateTime;
 import org.springframework.data.jpa.repository.JpaRepository;

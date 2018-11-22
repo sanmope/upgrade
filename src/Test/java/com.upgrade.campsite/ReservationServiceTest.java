@@ -1,15 +1,15 @@
+import com.upgrade.campsite.Application;
+import com.upgrade.campsite.Campsite;
+import com.upgrade.campsite.Reservation;
+import com.upgrade.campsite.ReservationService;
 import org.assertj.core.api.Assertions;
-import org.joda.time.DateTime;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.orm.ObjectOptimisticLockingFailureException;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import org.springframework.test.context.junit4.SpringRunner;
-import org.springframework.test.web.servlet.MockMvc;
 import upgrade.*;
 
 import javax.transaction.Transactional;

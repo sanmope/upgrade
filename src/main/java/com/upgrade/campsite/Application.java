@@ -1,4 +1,4 @@
-package upgrade;
+package com.upgrade.campsite;
 
 
 import org.springframework.boot.SpringApplication;
