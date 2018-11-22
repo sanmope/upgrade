@@ -27,8 +27,9 @@ public class ReservationController {
         return campsiteSet;
     }
 
-    @RequestMapping(value="/reservecampsite",method=RequestMethod.POST)
-    public Long reserveCampsite(@RequestParam(value="name", required=true) String name,@RequestParam(value="email", required=true) String email,
+    @RequestMapping(value="/reservecampsite")
+    public Long reserveCampsite(@RequestParam(value="name", required=true) String name,
+                                @RequestParam(value="email", required=true) String email,
                                 @RequestParam @DateTimeFormat(pattern="MM/dd/yyyy") DateTime from,
                                 @RequestParam  @DateTimeFormat(pattern="MM/dd/yyyy") DateTime to) throws Exception {
         Long reservationId;

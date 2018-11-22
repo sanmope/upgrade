@@ -23,20 +23,21 @@ public class ReservationServiceImpl implements ReservationService {
 
     @Override
     public Set<Date> getCampsiteByDateRange(DateTime from, DateTime to) {
-        Set<Campsite> setOfCampsiteAvailables = new HashSet<>();
         Set<Date> setOfAvailableDates = new HashSet<Date>();
-        setOfCampsiteAvailables = campsiteRepository.findByDateBetween(from.toDate(),to.toDate());
-        if (setOfCampsiteAvailables.size() != 0) {
-            if (to == null )
+        Set<Date> setOfCampsiteAlreadyReserved = campsiteRepository.findByDateBetween(from.toDate(),to.toDate()).stream().map(sc -> sc.getDate()).collect(Collectors.toSet());
+        try {
+            if (to == null)
                 to = from.plusDays(30);
-            for (DateTime date = from; date.isBefore(to); date = date.plusDays(1) ){
-                setOfAvailableDates.add(date.toDate());
+
+            for (DateTime date = from; date.isBefore(to); date = date.plusDays(1)) {
+                if (!isDateAlreadyReserved(date.toDate(), setOfCampsiteAlreadyReserved)) {
+                    setOfAvailableDates.add(date.toDate());
+                }
             }
-            Set<Date> datesInCampsite = setOfCampsiteAvailables.stream().map(sc -> sc.getDate()).collect(Collectors.toSet());
-            setOfAvailableDates.removeAll(datesInCampsite);
             return setOfAvailableDates;
-        }else
+        }catch (Exception e) {
             throw new CampsiteNotFoundException("No dates available for this period");
+        }
     }
 
     @Override
@@ -104,7 +105,7 @@ public class ReservationServiceImpl implements ReservationService {
     }
 
     private boolean isDateRangeLessThanThreeDays(DateTime from, DateTime to){
-        return (from.compareTo(to)>=3)?true:false;
+        return (to.compareTo(from)<=3)?true:false;
     }
 
     private Set<Campsite> getSetOfCampsitesRange(DateTime from, DateTime to) {
@@ -116,6 +117,17 @@ public class ReservationServiceImpl implements ReservationService {
     }
 
     private boolean isCheckinAnticipationValid(DateTime from, DateTime to){
-        return ( (from.compareTo(DateTime.now())>=1) || (from.compareTo(DateTime.now())<=30) )?true:false;
+        return ((DateTime.now().compareTo(from)>=1 || DateTime.now().compareTo(from)<=30) & DateTime.now().isBefore(from.toInstant()) & DateTime.now().isBefore(to.toInstant()))?true:false;
+    }
+
+
+    private boolean isDateAlreadyReserved(Date date,Set<Date> setOfCampsiteAlreadyReserved){
+        boolean reserved=false;
+        for (Date dateReserved : setOfCampsiteAlreadyReserved){
+            if (dateReserved.compareTo(date)==0){
+                reserved =true;
+            }
+        }
+        return reserved;
     }
 }
